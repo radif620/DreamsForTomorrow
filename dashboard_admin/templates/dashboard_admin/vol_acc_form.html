@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+    {% load crispy_forms_tags %}
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>New Volunteer</legend>
+            {{ form | crispy }}
+            {{ form_vol_cen | crispy }}
+        </fieldset>
+
+        <button type="submit">Register</button>
+
+    </form>
+
+</body>
+</html>
