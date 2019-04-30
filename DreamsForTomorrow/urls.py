@@ -25,7 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('webpage_main.urls')),
     path('admin_dash/', include('dashboard_admin.urls')),
-    path('user_dash/', user_views.user_home, name='user-home'),
+    path('user_dash/', include('dashboard_users.urls'), name='user-home'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('login/user_check', common_views.user_check,name='user-check'),
 ]
