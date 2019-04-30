@@ -1,0 +1,29 @@
+{% extends "dashboard_users/base.html" %}
+{% block content %}
+
+    {% if students|length %}
+        <h2 class="text-center">STUDENT INFO</h2>
+        <div class="line"></div>
+{#        <h2>Student Info : </h2>#}
+        {% for object in students %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h4>{{  object.name }} </h4>
+                        <p>Gender : {{ object.gender }} </p>
+                    </div>
+                    <div class="col-sm-4">
+                        <a class="btn btn-info" href="#" role="button">EDIT</a>
+                        <a class="btn btn-danger" href="#" role="button">DELETE</a>
+                    </div>
+                </div>
+                <div class="line"></div>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <h2 class="text-center">NO STUDENT ADDED</h2>
+
+    {% endif %}
+
+{% endblock %}
