@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from users.models import Volunteer_center
-from .forms import VolunteerDetailsForm, StudentAddForm
-from .models import Volunteer_details, Student_details
+from .forms import VolunteerDetailsForm, StudentAddForm, TaskAddForm, TaskAssignForm
+from .models import Volunteer_details, Student_details, Task, TaskAssign
 from django.views.generic import ListView
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect,get_object_or_404
@@ -74,8 +74,34 @@ def student_details(request):
     context={'students': students}
     return render(request,'dashboard_users/student_details.html',context)
 
-class studentlistview(ListView):
-    model = Student_details
-    context_object_name = 'students'
-    template_name = 'dashboard_users/student_details.html'
-    ordering = ['name']
+
+def task_add(request):
+    form = TaskAddForm(request.POST or None)
+    if form.is_valid():
+        task=form.save(commit=False)
+        task.assigned_by=request.user
+        task.save()
+        return redirect('task-list')
+    context={'form': form}
+    return render(request,'dashboard_users/task_add.html',context)
+
+
+def task_list(request):
+    tasks=Task.objects.filter(assigned_by__id=request.user.id)
+    context={'tasks': tasks}
+    return render(request,'dashboard_users/task_list.html',context)
+
+def task_assign(request):
+    if request.method=='POST':
+        form=TaskAssignForm(request.POST or None,user=request.user)
+        if form.is_valid():
+            assigned=form.save()
+            print(assigned)
+            form=TaskAssignForm(user=request.user)
+            return redirect('task-assign')
+
+    else:
+        form=TaskAssignForm(user=request.user)
+
+    return render(request,'dashboard_users/task_assign.html',{'form': form})
+

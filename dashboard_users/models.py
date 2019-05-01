@@ -21,3 +21,28 @@ class Student_details(models.Model):
     gender = models.CharField(max_length=6,choices=(('Male', 'Male'), ('Female', 'Female')), default='Male')
     class Meta:
         verbose_name_plural='Student_details'
+
+    def __str__(self):
+        return self.name
+
+
+class Task(models.Model):
+    assigned_by=models.ForeignKey(User,on_delete=models.CASCADE)
+    title=models.CharField(max_length=500)
+    type=models.CharField(max_length=150,choices=(('Individual','Individual'),('Group','Group')),default='Individual')
+    assign_date=models.DateField()
+
+    def __str__(self):
+        return self.title
+
+
+class TaskAssign(models.Model):
+    student = models.ForeignKey(Student_details,on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    student_work = models.TextField()
+    completed = models.BooleanField()
+    score = models.IntegerField()
+
+    class Meta:
+        unique_together=('student','task')
+
